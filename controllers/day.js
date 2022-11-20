@@ -55,11 +55,7 @@ async function updateDay(req, res) {
 
 async function userListByDay(req, res) {
   
-  
   const {date,type,shedule,floor} = req.body;
-
- 
-
   const response = await Day.find({"date":date,"userList.type":type});
   if (!response) {
     res.status(400).send({ msg: "Day not found" });

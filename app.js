@@ -28,4 +28,3 @@ app.use(`/api/${API_VERSION}`, cookieRoutes);
 app.use(`/api/${API_VERSION}`, dayRoutes);
 
 module.exports = app;
-
