@@ -58,8 +58,7 @@ async function userListByDay(req, res) {
   
   const {date,type,shedule,floor} = req.body;
 
-  if (!date) res.status(400).send({ msg: "Date is missing" });
-  if (!type) res.status(400).send({ msg: "Type is missing" });
+ 
 
   const response = await Day.find({"date":date,"userList.type":type});
   if (!response) {
