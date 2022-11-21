@@ -55,10 +55,13 @@ async function updateDay(req, res) {
 
 async function userListByDay(req, res) {
   const { date, type, shedule, floor } = req.body;
+  if (!type) res.status(400).send({ msg: "El type es obligatorio" });
+  if (!date) res.status(400).send({ msg: "El date es obligatorio" });
+
   const response = await Day.find({ date: date, "userList.type": type });
 
   if (response.length < 1) {
-    res.status(400).send({ msg: "No users for this day" });
+    res.status(200).send(response);
   } else {
     res.status(200).send(
       response[0].userList
