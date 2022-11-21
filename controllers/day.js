@@ -54,15 +54,19 @@ async function updateDay(req, res) {
 }
 
 async function userListByDay(req, res) {
-  
-  const {date,type,shedule,floor} = req.body;
-  const response = await Day.find({"date":date,"userList.type":type});
-  if (!response) {
-    res.status(400).send({ msg: "Day not found" });
+  const { date, type, shedule, floor } = req.body;
+  const response = await Day.find({ date: date, "userList.type": type });
+
+  if (response.length < 1) {
+    res.status(400).send({ msg: "No users for this day" });
   } else {
-    res.status(200).send(response[0].userList.filter(x=> x.type == type).filter(x => x.shedule.search(shedule)>-1).filter(x => x.floor.search(floor)>-1));
+    res.status(200).send(
+      response[0].userList
+        .filter((x) => x.type == type)
+        .filter((x) => x.shedule.search(shedule) > -1)
+        .filter((x) => x.floor.search(floor) > -1)
+    );
   }
-  
 }
 
 module.exports = {
