@@ -15,5 +15,6 @@ api.patch(
   UserController.updateUser
 );
 api.delete("/user/:id", [md_auth.asureAuth], UserController.deleteUser);
+api.post("/user/registerDays", UserController.getRegisterDayByuser);
 
 module.exports = api;

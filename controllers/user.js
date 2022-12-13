@@ -35,11 +35,6 @@ async function createUser(req, res) {
   const hasPassword = bcrypt.hashSync(password, salt);
   user.password = hasPassword;
 
-  if (req.files.avatar) {
-     const imagePath = image.getFilePath(req.files.avatar);
-    user.avatar = imagePath;
-  }
-
   user.save((error, userStored) => {
     if (error) {
       res.status(400).send({ msg: "Error creating user" });
@@ -87,10 +82,37 @@ async function deleteUser(req, res) {
   });
 }
 
+async function getRegisterDayByuser(req, res) {
+  const { email, date, type, shedule, floor } = req.body;
+  if (!email) res.status(400).send({ msg: "El email es obligatorio" });
+  if (!date) res.status(400).send({ msg: "El date es obligatorio" });
+
+  const response = await User.find({ email: email });
+
+  if (response.length < 1) {
+    res.status(200).send(response);
+  } else {
+    let resultado;
+    if (date)
+      resultado = response[0].registerDays.filter((x) => x.date == date);
+
+    if (resultado.length > 0) {
+      if (shedule) resultado = resultado.filter((x) => x.shedule == shedule);
+
+      if (floor) resultado = resultado.filter((x) => x.floor == floor);
+
+      if (type) resultado = resultado.filter((x) => x.type == type);
+    }
+
+    res.status(200).send(resultado);
+  }
+}
+
 module.exports = {
   getMe,
   getUsers,
   createUser,
   updateUser,
   deleteUser,
+  getRegisterDayByuser,
 };
