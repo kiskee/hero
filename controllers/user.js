@@ -108,6 +108,19 @@ async function getRegisterDayByuser(req, res) {
   }
 }
 
+async function updateDaysForUsers(req, res) {
+  const { email } = req.body;
+  const data = req.body;
+
+  User.findOneAndUpdate({ email: email }, data, (error) => {
+    if (error) {
+      res.status(400).send({ msg: "Failed to update Day" });
+    } else {
+      res.status(200).send({ msg: "successful update" });
+    }
+  });
+} 
+
 module.exports = {
   getMe,
   getUsers,
@@ -115,4 +128,5 @@ module.exports = {
   updateUser,
   deleteUser,
   getRegisterDayByuser,
+  updateDaysForUsers,
 };
