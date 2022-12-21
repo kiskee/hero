@@ -85,13 +85,14 @@ async function deleteUser(req, res) {
 async function getRegisterDayByuser(req, res) {
   const { email, date, type, shedule, floor } = req.body;
   if (!email) res.status(400).send({ msg: "El email es obligatorio" });
-  if (!date) res.status(400).send({ msg: "El date es obligatorio" });
+  //if (!date) res.status(400).send({ msg: "El date es obligatorio" });
 
   const response = await User.find({ email: email });
 
   if (response.length < 1) {
-    res.status(200).send(response);
+    res.status(400).send('no data for this email');
   } else {
+    /*
     let resultado;
     if (date)
       resultado = response[0].registerDays.filter((x) => x.date == date);
@@ -105,6 +106,9 @@ async function getRegisterDayByuser(req, res) {
     }
 
     res.status(200).send(resultado);
+  }
+  */
+  res.status(200).send(response[0].registerDays);
   }
 }
 
