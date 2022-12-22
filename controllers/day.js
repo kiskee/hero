@@ -55,21 +55,24 @@ async function updateDay(req, res) {
 
 async function userListByDay(req, res) {
   const { date, type, shedule, floor } = req.body;
-  //if (!type) res.status(400).send({ msg: "El type es obligatorio" });
+
   if (!date) res.status(400).send({ msg: "El date es obligatorio" });
 
-  const response = await Day.find({ date: date, "userList.type": type });
+  const response = await Day.findOne({ date: date });
 
-  if (response.length < 1) {
-    res.status(200).send(response);
-  } else {
-    res.status(200).send(
-      response[0].userList
-        .filter((x) => x.type == type)
-        .filter((x) => x.shedule.search(shedule) > -1)
-        .filter((x) => x.floor.search(floor) > -1)
-    );
+  let result = response.userList;
+
+  if (type) {
+    result = result.filter((x) => x.type == type);
   }
+  if (shedule) {
+    result = result.filter((x) => x.shedule.search(shedule) > -1);
+  }
+  if (floor) {
+    result = result.filter((x) => x.floor.search(floor) > -1);
+  }
+
+  res.status(200).send(result);
 }
 
 module.exports = {
